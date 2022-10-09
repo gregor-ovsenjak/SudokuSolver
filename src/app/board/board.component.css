@@ -1,0 +1,14 @@
+
+.board {
+    width: 500px;
+    height: 500px;
+    border: 2.5px solid black;
+    border-radius: 5px;
+    padding: 0px;
+    margin-top: 7.5%;
+    position: center;
+}
+
+.flex-container {
+    display: flex;
+  }
