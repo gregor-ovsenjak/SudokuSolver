@@ -1,6 +1,6 @@
 <div class="container board">
     <div class="flex-container" *ngFor ="let row of Rows" [ngStyle]="{ 'height': 100/Rows.length + '%' }">
-    <app-cell *ngFor ="let col of Cols" id="{{row}}_{{col}}" [ngStyle]="{ 'width': 100/Cols.length + '%','height': 100 + '%' }">
+    <app-cell *ngFor ="let col of Cols" id="{{row}}_{{col}}" [ngStyle]="{ 'width': 100/Cols.length + '%','height': 100 + '%' }" >
     </app-cell>
     </div>
 </div>
