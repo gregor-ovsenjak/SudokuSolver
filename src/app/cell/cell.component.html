@@ -1,4 +1,4 @@
-<input type="text"  class="input" 
+<input type="text" (keypress)="validate($event)" class="input" 
                     (mouseenter)="changeColorOnEnter()" 
                     (mouseleave)="changeColorOnLeave()" 
                     [ngStyle]="{'background':color, 'transition':'background 0.75s'}">
