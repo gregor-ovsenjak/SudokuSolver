@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { HtmlParser } from '@angular/compiler';
+import { Component, OnInit,Output,EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-cell',
@@ -10,14 +11,28 @@ export class CellComponent implements OnInit {
   color:string = "transparent";
   input:string = "";
 
+  @Output() inputEvent = new EventEmitter<any>();
+
 
   changeColorOnEnter() {
-    this.color = "rgba(54, 124, 255, 0.483)"
+    this.color = "rgba(54, 124, 255, 0.483)";
   }
 
   
   changeColorOnLeave() {
-    this.color = "transparent"
+    this.color = "transparent";
+  }
+
+
+  updateInput(evt:Event) {
+    let inputElement: HTMLInputElement = (<HTMLInputElement>evt.target)
+    this.input = inputElement.value;
+    let parent: HTMLElement = <HTMLElement> inputElement.parentElement;
+    let row : number = parseInt(parent.id.split("_")[0]);
+    let col: number = parseInt(parent.id.split("_")[1]);
+    let objectEmitedToSudokuBoard : any = {value:this.input, row:row, col:col};
+
+    this.inputEvent.emit( objectEmitedToSudokuBoard)
   }
 
 

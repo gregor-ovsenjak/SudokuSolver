@@ -1,6 +1,8 @@
-<input type="text" maxlength="1" (keydown)="validate($event)" class="input" 
+<input type="text" maxlength="1" class="input" 
+                    (keydown)="validate($event)"  
                     (mouseenter)="changeColorOnEnter()" 
-                    (mouseleave)="changeColorOnLeave()" 
+                    (mouseleave)="changeColorOnLeave()"
+                    (input) ="updateInput($event)"
                     [ngStyle]="{'background':color,
                                 'transition':'background 0.75s'}"
                     >
