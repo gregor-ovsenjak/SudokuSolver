@@ -1,4 +1,4 @@
-<div class="container board" >
+<div class="container board grad" >
     <div class="flex-container " *ngFor ="let row of Rows" [ngStyle]="{ 'height': 100/Rows.length + '%' }">
         <app-cell  *ngFor ="let col of Cols" 
                             id="{{row}}_{{col}}"
@@ -10,7 +10,7 @@
     </div>
     <button class="btn btn-primary btn-lg" 
             [disabled]="!boardFilled ? true: false"
-            (click) = "solveSudokuPuzzle()"
-            [ngStyle]="{'margin-top':'3%','margin-left':'33%'} "> Solve Sudoku Puzzle
+            (click) = "solveSudokuPuzzle(4,4)"
+            [ngStyle]="{'margin-top':'3%','margin-left':'32.5%'} "> Solve Sudoku Puzzle
     </button>
 </div>

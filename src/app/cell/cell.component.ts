@@ -39,7 +39,7 @@ export class CellComponent implements OnInit {
   validate(evt: KeyboardEvent) {
       
       let key: string  = evt.key;
-      var regex:RegExp = /[0-9]/;
+      var regex:RegExp = /[1-9]/;
       
       if( !regex.test(key) && evt.key !== "Backspace" ) {
         if(evt.preventDefault) evt.preventDefault();
