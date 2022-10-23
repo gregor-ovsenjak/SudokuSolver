@@ -1,5 +1,5 @@
 import { HtmlParser } from '@angular/compiler';
-import { Component, OnInit,Output,EventEmitter } from '@angular/core';
+import { Component, OnInit,Output,EventEmitter ,Input} from '@angular/core';
 
 @Component({
   selector: 'app-cell',
@@ -12,7 +12,7 @@ export class CellComponent implements OnInit {
   input:string = "";
 
   @Output() inputEvent = new EventEmitter<any>();
-
+  @Input() sudokuNumber: number = 0;
 
   changeColorOnEnter() {
     this.color = "rgba(54, 124, 255, 0.483)";
@@ -22,6 +22,8 @@ export class CellComponent implements OnInit {
   changeColorOnLeave() {
     this.color = "transparent";
   }
+
+  
 
 
   updateInput(evt:Event) {

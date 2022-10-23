@@ -2,15 +2,17 @@
     <div class="flex-container " *ngFor ="let row of Rows" [ngStyle]="{ 'height': 100/Rows.length + '%' }">
         <app-cell  *ngFor ="let col of Cols" 
                             id="{{row}}_{{col}}"
+                            [sudokuNumber]="SudokuGrid[row-1][col-1]"
                             (inputEvent)="recieveInput($event)"
                             [ngStyle]="{ 'width': 100/Cols.length + '%',
                                         'height': 100 + '%',
                                         'border-bottom': ChooseBorderType(row),'border-right': ChooseBorderType(col)}">
+            
         </app-cell>
     </div>
     <button class="btn btn-primary btn-lg" 
             [disabled]="!boardFilled ? true: false"
-            (click) = "solveSudokuPuzzle(4,4)"
+            (click) = "solveSudokuPuzzle(0,0)"
             [ngStyle]="{'margin-top':'3%','margin-left':'32.5%'} "> Solve Sudoku Puzzle
     </button>
 </div>
