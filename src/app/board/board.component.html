@@ -10,9 +10,18 @@
             
         </app-cell>
     </div>
-    <button class="btn btn-primary btn-lg" 
-            [disabled]="!boardFilled ? true: false"
-            (click) = "solveSudokuPuzzle(0,0)"
-            [ngStyle]="{'margin-top':'3%','margin-left':'32.5%'} "> Solve Sudoku Puzzle
-    </button>
+    <div class="flex-container" >
+        <button class="btn btn-primary btn-lg" 
+        [disabled]="!boardFilled ? true: false"
+        (click) = "solveSudokuPuzzle(0,0)"
+        [ngStyle]="{'margin-top':'3%','margin-left':'10%'}"> Solve Sudoku Puzzle
+        </button>
+        <button class="btn btn-info btn-lg" 
+            [disabled]="!boardFilled ? false: true"
+            (click) = "clearGrid()"
+            [ngStyle]="{'margin-top':'3%','margin-left':'11.5%'} "> Clear Sudoku Puzzle
+        </button>
+    </div>
+    
 </div>
+<div class="vl"></div>

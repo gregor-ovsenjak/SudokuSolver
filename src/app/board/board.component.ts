@@ -25,16 +25,31 @@ export class BoardComponent implements OnInit {
 
   recieveInput(input: any) {
     
-    this.SudokuGrid[input.row-1][input.col -1] = parseInt(input.value);
+    let value: number  = input.value == "" ? 0 : parseInt(input.value)
+    this.SudokuGrid[input.row-1][input.col -1] = value;
+  }
+
+  clearGrid(){
+    for (var i = 0; i <=8; i++){
+      for (var j = 0; j <=8; j++){
+        this.SudokuGrid[i][j] = 0;
+      }
+
+    }
+    this.boardFilled = true;
   }
 
 
   solveSudokuPuzzle(row:number,col:number) : boolean
   {
-    console.log(row,col)
     // this is the break statement that checks if the sudoku is solved
       if (row == 8 && col == 8) {
-        
+        let SumToNine: number = 9*(9+1)/2
+        let SumOfLastRow = this.SudokuGrid[row].reduce((accumulator:number,value:number) => {
+          return accumulator + value
+        },0);
+        this.boardFilled = false;
+        this.SudokuGrid[row][col] = this.SudokuGrid[row][col] != 0 ? this.SudokuGrid[row][col] : SumToNine - SumOfLastRow;
         return true;
       }
       if ( col == 9) {
