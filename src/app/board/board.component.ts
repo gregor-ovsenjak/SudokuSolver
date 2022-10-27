@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { refCount } from 'rxjs';
 
 
 
@@ -14,6 +15,7 @@ export class BoardComponent implements OnInit {
   Rows: Array<number> = [1,2,3,4,5,6,7,8,9];
   Cols: Array<number> = [1,2,3,4,5,6,7,8,9];
   SudokuGrid: number[][] = Array(9).fill(0).map(() => Array(9).fill(0));
+  sudokuNumber:number = 0;
   boardFilled: boolean = true;
 
 
@@ -26,7 +28,11 @@ export class BoardComponent implements OnInit {
   recieveInput(input: any) {
     
     let value: number  = input.value == "" ? 0 : parseInt(input.value)
-    this.SudokuGrid[input.row-1][input.col -1] = value;
+    let row: number = input.row-1;
+    let col: number = input.col-1
+    
+    this.SudokuGrid[row][col] = this.checkIfInputCorrect(row,col,value);
+    
   }
 
   clearGrid(){
@@ -34,9 +40,22 @@ export class BoardComponent implements OnInit {
       for (var j = 0; j <=8; j++){
         this.SudokuGrid[i][j] = 0;
       }
-
     }
     this.boardFilled = true;
+  }
+
+  checkIfInputCorrect(row:number,col:number,value:number): number{
+    let ConditionCheck : boolean = this.checkConditions(row,col,value);
+    if( ConditionCheck == true ) {
+      return value;
+    }else{
+      
+      
+      return 0;
+      
+    }
+
+    
   }
 
 
@@ -83,6 +102,9 @@ export class BoardComponent implements OnInit {
     var smallGridI:number = ~~(row/3);
     var smallGridJ:number = ~~(col/3);
     
+    if (N == 0 || N == -1) {
+      return true;
+    }
     // checks for condition in small grid
 
     for (var i = 0; i <= 2; i++) {

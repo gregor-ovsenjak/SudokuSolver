@@ -3,7 +3,8 @@
                     (mouseenter)="changeColorOnEnter()" 
                     (mouseleave)="changeColorOnLeave()"
                     (input) ="updateInput($event)"
-                    [value]="sudokuNumber==0 ? null : sudokuNumber"
+                    [value]="(sudokuNumber==0) ? null : sudokuNumber"
                     [ngStyle]="{'background':color,
-                                'transition':'background 0.75s'}"
-                    >
+                                'transition':'background 0.75s'
+                            }"
+                            > 

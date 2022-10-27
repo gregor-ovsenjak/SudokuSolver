@@ -1,15 +1,16 @@
 import { HtmlParser } from '@angular/compiler';
-import { Component, OnInit,Output,EventEmitter ,Input} from '@angular/core';
+import { Component, OnInit,Output,EventEmitter ,Input,OnChanges, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'app-cell',
   templateUrl: './cell.component.html',
   styleUrls: ['./cell.component.css']
 })
-export class CellComponent implements OnInit {
+export class CellComponent implements OnChanges {
   
   color:string = "transparent";
   input:string = "";
+  
 
   @Output() inputEvent = new EventEmitter<any>();
   @Input() sudokuNumber: number = 0;
@@ -23,18 +24,17 @@ export class CellComponent implements OnInit {
     this.color = "transparent";
   }
 
-  
-
 
   updateInput(evt:Event) {
     let inputElement: HTMLInputElement = (<HTMLInputElement>evt.target)
     this.input = inputElement.value;
+    inputElement.value = "";
     let parent: HTMLElement = <HTMLElement> inputElement.parentElement;
     let row : number = parseInt(parent.id.split("_")[0]);
     let col: number = parseInt(parent.id.split("_")[1]);
     let objectEmitedToSudokuBoard : any = {value:this.input, row:row, col:col};
 
-    this.inputEvent.emit( objectEmitedToSudokuBoard)
+    this.inputEvent.emit( objectEmitedToSudokuBoard);
   }
 
 
@@ -52,6 +52,10 @@ export class CellComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(this.sudokuNumber)
   }
 
 
