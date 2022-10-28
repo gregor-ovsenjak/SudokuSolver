@@ -25,3 +25,9 @@
     
 </div>
 <div class="vl"></div>
+<button class="btn btn-danger btn-lg" 
+        [disabled]="!boardFilled ? false: true"
+        (click) = "visualizeAlgorithm($event)"
+        [ngClass]="{'visualize' : visualizeSudokuAlgorithm,'visualizeWhenOff' : !visualizeSudokuAlgorithm}"
+        [ngStyle]="{'margin-top':'175px','margin-left':'1000px','position':'sticky'}"> Visualize the algorithm
+</button>

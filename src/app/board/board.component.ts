@@ -17,6 +17,7 @@ export class BoardComponent implements OnInit {
   SudokuGrid: number[][] = Array(9).fill(0).map(() => Array(9).fill(0));
   sudokuNumber:number = 0;
   boardFilled: boolean = true;
+  visualizeSudokuAlgorithm: boolean = false;
 
 
   ChooseBorderType(rowOrCol:number): string  {
@@ -35,6 +36,13 @@ export class BoardComponent implements OnInit {
     
   }
 
+
+  visualizeAlgorithm(evt: Event){
+    let inputElement: HTMLButtonElement = (<HTMLButtonElement>evt.target);
+    this.visualizeSudokuAlgorithm = true;
+  }
+
+
   clearGrid(){
     for (var i = 0; i <=8; i++){
       for (var j = 0; j <=8; j++){
@@ -42,6 +50,7 @@ export class BoardComponent implements OnInit {
       }
     }
     this.boardFilled = true;
+    this.visualizeSudokuAlgorithm = false;
   }
 
   checkIfInputCorrect(row:number,col:number,value:number): number{
