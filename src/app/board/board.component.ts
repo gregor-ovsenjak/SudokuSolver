@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { refCount } from 'rxjs';
+import { delay, refCount } from 'rxjs';
 
-
+interface Mapper {
+  row: number;
+  col: number;
+  possibleSolution:number
+}
 
 
 
@@ -15,6 +19,7 @@ export class BoardComponent implements OnInit {
   Rows: Array<number> = [1,2,3,4,5,6,7,8,9];
   Cols: Array<number> = [1,2,3,4,5,6,7,8,9];
   SudokuGrid: number[][] = Array(9).fill(0).map(() => Array(9).fill(0));
+  HashMapSolution: Mapper[] =  [];
   sudokuNumber:number = 0;
   boardFilled: boolean = true;
   visualizeSudokuAlgorithm: boolean = false;
@@ -40,17 +45,78 @@ export class BoardComponent implements OnInit {
   visualizeAlgorithm(evt: Event){
     let inputElement: HTMLButtonElement = (<HTMLButtonElement>evt.target);
     this.visualizeSudokuAlgorithm = true;
+    let elementSibling: HTMLElement = <HTMLElement>inputElement.previousElementSibling;
+    let elementSiblingChildren : HTMLCollection = elementSibling.children;
+    let arrayOfChildren: Array<Element> = Array.from(elementSiblingChildren)
+    
+    this.HashMapSolution.forEach((sol) => {
+      arrayOfChildren.forEach((child)=> {
+        let appChildren : HTMLCollection = child.children;
+        let appchildForRow: Array<Element> = Array.from(appChildren)
+        setTimeout(()=>{
+          appchildForRow.forEach((appChild)=> {
+            let row : number = parseInt(appChild.id.split("_")[0]);
+            let col: number = parseInt(appChild.id.split("_")[1]);
+            let inputElement:HTMLInputElement = <HTMLInputElement>appChild
+            let rowOfHash:number = sol["row"];
+            let colOfHash:number = sol["col"];
+             
+              if (row==rowOfHash+1 && col == colOfHash+1) {
+                
+                
+                  inputElement.innerText = sol["possibleSolution"].toString();
+                  inputElement.style.fontFamily = "Helvetica, Arial, sans-serif";
+                  inputElement.style.fontSize = "24px";
+                  inputElement.style.textAlign = "center";
+                  inputElement.style.paddingTop = "12px"
+                
+              }
+            
+          })
+        },12)
+
+      })
+
+    }) 
+    
   }
 
 
-  clearGrid(){
+  clearGrid(evt: Event){
     for (var i = 0; i <=8; i++){
       for (var j = 0; j <=8; j++){
         this.SudokuGrid[i][j] = 0;
       }
     }
-    this.boardFilled = true;
-    this.visualizeSudokuAlgorithm = false;
+    
+
+    let inputElement: HTMLButtonElement = (<HTMLButtonElement>evt.target);
+    this.visualizeSudokuAlgorithm = true;
+    let elementSibling: HTMLElement = <HTMLElement>inputElement.parentElement;
+    let elementSibling2: HTMLElement = <HTMLElement>elementSibling.parentElement;
+    let elementSibling3: HTMLElement = <HTMLElement>elementSibling2.parentElement;
+    
+    let elementSibling4: HTMLCollection = elementSibling3.getElementsByClassName("container board2 grad")
+    
+    let elementSiblingChildren : HTMLCollection = elementSibling4[0].children;
+    let arrayOfChildren: Array<Element> = Array.from(elementSiblingChildren)
+    
+    
+      arrayOfChildren.forEach((child)=> {
+        let appChildren : HTMLCollection = child.children;
+        let appchildForRow: Array<Element> = Array.from(appChildren)
+        
+          appchildForRow.forEach((appChild)=> {
+            let inputElement:HTMLInputElement = <HTMLInputElement>appChild
+            
+            inputElement.innerText = ""
+          })
+        
+      })
+
+      this.boardFilled = true;
+      this.visualizeSudokuAlgorithm = false;
+      this.HashMapSolution.splice(0,this.HashMapSolution.length)
   }
 
   checkIfInputCorrect(row:number,col:number,value:number): number{
@@ -70,6 +136,7 @@ export class BoardComponent implements OnInit {
 
   solveSudokuPuzzle(row:number,col:number) : boolean
   {
+    
     // this is the break statement that checks if the sudoku is solved
       if (row == 8 && col == 8) {
         let SumToNine: number = 9*(9+1)/2
@@ -93,6 +160,8 @@ export class BoardComponent implements OnInit {
           
                 //console.log(this.SudokuGrid[row][col],row,col);
               this.SudokuGrid[row][col] = i;
+              let mapper:Mapper = {row:row,col:col,possibleSolution:i};
+              this.HashMapSolution.push(mapper);
               if (this.solveSudokuPuzzle(row,col+1)){
                 return true
               }
