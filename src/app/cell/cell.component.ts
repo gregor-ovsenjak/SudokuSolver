@@ -55,7 +55,7 @@ export class CellComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.sudokuNumber)
+    
   }
 
 

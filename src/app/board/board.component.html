@@ -29,7 +29,7 @@
 <div class="container board2 grad"  [ngClass]="{'visualizeSecondGridOff' : !visualizeSudokuAlgorithm,'visualizeSecondGrid' : visualizeSudokuAlgorithm}">
     <div class="flex-container " *ngFor ="let row of Rows" [ngStyle]="{ 'height': 100/Rows.length + '%' }">
         <app-cell  *ngFor ="let col of Cols" 
-                            id="{{row}}_{{col}}"
+                            id="{{row}}__{{col}}"
                             
                             [ngStyle]="{ 'width': 100/Cols.length + '%',
                                         'height': 100 + '%',

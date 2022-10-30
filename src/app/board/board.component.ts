@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ElementRef } from '@angular/core';
 import { delay, refCount } from 'rxjs';
 
 interface Mapper {
   row: number;
   col: number;
-  possibleSolution:number
+  possibleSolution:number;
+  hashable: boolean ;
 }
 
 
@@ -16,6 +17,8 @@ interface Mapper {
 })
 export class BoardComponent implements OnInit {
   
+
+
   Rows: Array<number> = [1,2,3,4,5,6,7,8,9];
   Cols: Array<number> = [1,2,3,4,5,6,7,8,9];
   SudokuGrid: number[][] = Array(9).fill(0).map(() => Array(9).fill(0));
@@ -38,6 +41,7 @@ export class BoardComponent implements OnInit {
     let col: number = input.col-1
     
     this.SudokuGrid[row][col] = this.checkIfInputCorrect(row,col,value);
+    this.HashMapSolution.push({row:row,col:col,possibleSolution:this.checkIfInputCorrect(row,col,value),hashable:false});
     
   }
 
@@ -48,32 +52,51 @@ export class BoardComponent implements OnInit {
     let elementSibling: HTMLElement = <HTMLElement>inputElement.previousElementSibling;
     let elementSiblingChildren : HTMLCollection = elementSibling.children;
     let arrayOfChildren: Array<Element> = Array.from(elementSiblingChildren)
-    
-    this.HashMapSolution.forEach((sol) => {
+    let previousInput: HTMLElement;
+    this.HashMapSolution.forEach((sol,index) => {
       arrayOfChildren.forEach((child)=> {
         let appChildren : HTMLCollection = child.children;
         let appchildForRow: Array<Element> = Array.from(appChildren)
         setTimeout(()=>{
           appchildForRow.forEach((appChild)=> {
-            let row : number = parseInt(appChild.id.split("_")[0]);
-            let col: number = parseInt(appChild.id.split("_")[1]);
-            let inputElement:HTMLInputElement = <HTMLInputElement>appChild
+            let row : number = parseInt(appChild.id.split("__")[0]);
+            let col: number = parseInt(appChild.id.split("__")[1]);
+            let inputElement:HTMLInputElement = <HTMLInputElement>appChild;
+            
             let rowOfHash:number = sol["row"];
             let colOfHash:number = sol["col"];
-             
-              if (row==rowOfHash+1 && col == colOfHash+1) {
+              
+              if (row==rowOfHash+1 && col == colOfHash+1 && this.HashMapSolution[index]["hashable"]==true) {
                 
-                
+                if (rowOfHash<=this.HashMapSolution[index-1]["row"] && colOfHash <=this.HashMapSolution[index-1]["col"]) {
+                  previousInput.innerText = "";
+                  
+                }
+                  
                   inputElement.innerText = sol["possibleSolution"].toString();
                   inputElement.style.fontFamily = "Helvetica, Arial, sans-serif";
                   inputElement.style.fontSize = "24px";
                   inputElement.style.textAlign = "center";
                   inputElement.style.paddingTop = "12px"
+                  previousInput = inputElement;
+                  
                 
-              }
+              }else if (
+                row==rowOfHash+1 && col == colOfHash+1 && this.HashMapSolution[index]["hashable"]==false
+              )
+              {
+                inputElement.innerText = sol["possibleSolution"].toString();
+                inputElement.style.color = "red";
+                
+                inputElement.style.fontFamily = "Helvetica, Arial, sans-serif";
+                inputElement.style.fontSize = "24px";
+                inputElement.style.textAlign = "center";
+                inputElement.style.paddingTop = "12px"
+              
+            }
             
           })
-        },12)
+        },10)
 
       })
 
@@ -145,6 +168,7 @@ export class BoardComponent implements OnInit {
         },0);
         this.boardFilled = false;
         this.SudokuGrid[row][col] = this.SudokuGrid[row][col] != 0 ? this.SudokuGrid[row][col] : SumToNine - SumOfLastRow;
+        this.HashMapSolution.push({row:row,col:col,possibleSolution:this.SudokuGrid[row][col],hashable:true})
         return true;
       }
       if ( col == 9) {
@@ -160,7 +184,7 @@ export class BoardComponent implements OnInit {
           
                 //console.log(this.SudokuGrid[row][col],row,col);
               this.SudokuGrid[row][col] = i;
-              let mapper:Mapper = {row:row,col:col,possibleSolution:i};
+              let mapper:Mapper = {row:row,col:col,possibleSolution:i,hashable:true};
               this.HashMapSolution.push(mapper);
               if (this.solveSudokuPuzzle(row,col+1)){
                 return true
