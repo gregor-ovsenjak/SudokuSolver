@@ -54,24 +54,27 @@ export class BoardComponent implements OnInit {
     let arrayOfChildren: Array<Element> = Array.from(elementSiblingChildren)
     let previousInput: HTMLElement;
     this.HashMapSolution.forEach((sol,index) => {
+      
       arrayOfChildren.forEach((child)=> {
         let appChildren : HTMLCollection = child.children;
         let appchildForRow: Array<Element> = Array.from(appChildren)
         setTimeout(()=>{
-          appchildForRow.forEach((appChild)=> {
+          appchildForRow.forEach((appChild,i)=> {
             let row : number = parseInt(appChild.id.split("__")[0]);
             let col: number = parseInt(appChild.id.split("__")[1]);
             let inputElement:HTMLInputElement = <HTMLInputElement>appChild;
-            
+            if (i == 0 && index == 0) {
+              previousInput = inputElement ;
+            }
             let rowOfHash:number = sol["row"];
             let colOfHash:number = sol["col"];
               
               if (row==rowOfHash+1 && col == colOfHash+1 && this.HashMapSolution[index]["hashable"]==true) {
-                
-                if (rowOfHash<=this.HashMapSolution[index-1]["row"] && colOfHash <=this.HashMapSolution[index-1]["col"]) {
-                  previousInput.innerText = "";
-                  
-                }
+                if (index > 0) {
+                  if (rowOfHash<=this.HashMapSolution[index-1]["row"] && colOfHash <=this.HashMapSolution[index-1]["col"] ) {
+                    previousInput.innerText = "";
+                    
+                }}
                   
                   inputElement.innerText = sol["possibleSolution"].toString();
                   inputElement.style.fontFamily = "Helvetica, Arial, sans-serif";
@@ -133,6 +136,7 @@ export class BoardComponent implements OnInit {
             let inputElement:HTMLInputElement = <HTMLInputElement>appChild
             
             inputElement.innerText = ""
+            inputElement.style.color = "black";
           })
         
       })
@@ -141,6 +145,7 @@ export class BoardComponent implements OnInit {
       this.visualizeSudokuAlgorithm = false;
       this.HashMapSolution.splice(0,this.HashMapSolution.length)
   }
+
 
   checkIfInputCorrect(row:number,col:number,value:number): number{
     let ConditionCheck : boolean = this.checkConditions(row,col,value);
@@ -162,13 +167,13 @@ export class BoardComponent implements OnInit {
     
     // this is the break statement that checks if the sudoku is solved
       if (row == 8 && col == 8) {
-        let SumToNine: number = 9*(9+1)/2
+        let SumToNine: number = 9*(9+1)/2;
         let SumOfLastRow = this.SudokuGrid[row].reduce((accumulator:number,value:number) => {
-          return accumulator + value
+          return accumulator + value;
         },0);
         this.boardFilled = false;
         this.SudokuGrid[row][col] = this.SudokuGrid[row][col] != 0 ? this.SudokuGrid[row][col] : SumToNine - SumOfLastRow;
-        this.HashMapSolution.push({row:row,col:col,possibleSolution:this.SudokuGrid[row][col],hashable:true})
+        this.HashMapSolution.push({row:row,col:col,possibleSolution:this.SudokuGrid[row][col],hashable:true});
         return true;
       }
       if ( col == 9) {
